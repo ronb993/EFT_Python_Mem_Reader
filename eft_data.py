@@ -42,7 +42,6 @@ class EFT:
                     object_name_ptr = pm.read_ulonglong(self.obj_ptr + Offsets.unity_object_name)
                     object_name = pm.read_string(object_name_ptr)
                     if object_name == name:
-                        print(f'You Found: {name}')
                         self.object_loop_ran = True
                         return self.obj_ptr
 
@@ -55,7 +54,6 @@ class EFT:
     def find_gameworld(self):
         if not self.object_loop_ran:
             self.gameworld_ptr = self.run_objects_loop(self.gom, "GameWorld")
-            print("You Found Game World")
             return self.gameworld_ptr
         else:
             print("Secon iteration of runnning object loop")
@@ -63,7 +61,6 @@ class EFT:
     def get_lgw_ptr(self):
             try:
                 self.lgw_ptr = self.ptr_chain(self.gameworld_ptr, offsets=Offsets.lgw_ptrchain)
-                print("You Found Local Game World")
                 return self.lgw_ptr
 
             except Exception as e:

@@ -1,0 +1,31 @@
+gom = 0x17FFD28
+
+ulong ActiveNodes = Memory.ReadPtr(_gom.ActiveNodes);
+ulong lastActiveNode = Memory.ReadPtr(_gom.LastActiveNode);
+var gameWorld = GetObjectFromList(activeNodes, lastActiveNode, "GameWorld")
+
+
+ActiveObject = ReadStruct<BaseObject>(Memory.ReadPtr(listPtr))
+
+
+7FFC 28A9 FD28 GOM+DLL
+
+7FF6 CADF 7F37
+7FF6 CADF 8B37
+7FFC 2784 7F37
+
+
+7FFC27848B37
+
+
+7FFC 2784 7F37
+7FFC 2784 8B37 
+
+
+offset 005A7F37
+0x7ffc272a0000 + 005A7F37 = Return offset + dll base
+
+
+
+
+

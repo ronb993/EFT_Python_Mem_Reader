@@ -1,0 +1,58 @@
+gom = 0x17FFD28
+UnityPlayer.dll + 0x17FFD28
+GameWorld_LocalGameWorld = new uint[] { 0x30, 0x18, 0x28 };
+RegisteredPlayers = 0x80
+RegisteredPlayers_Count = 0x18
+Transform_TransformInternal = new uint[] { 0xA8, 0x28, 0x28, 0x10, 0x20, 0x10 };
+UnityObject_Name = 0x60
+UnityListBase = 0x10
+UnityListBase_Start = 0x20
+BASE_OBJECT = 0x10
+GAME_OBJECT = 0x30
+GAME_OBJECT_NAME_PTR = 0x60
+
+128, 4, 149, 
+for rebase in ghidra use 00000000, for rebase in ida use 0x0
+
+1805A8B37
+
+wait_for_game():
+
+    if (get_game_object_manager() && get_local_game_world())
+	thread.sleep(?)
+
+
+GetLGW()
+	try:
+		activenodes = pm.readint(_gom.ActiveNodes)
+		lastActivenodes = pm.readint(_gom.LastActiveNode)
+		gameworld = getobjectfromlist(ActiveNodes, LastActiveNode, "GameWorld")
+		if (gameworld == 0) "unable to find"
+		_localgameworld = memory.readptrchain(gameWorld, Offsets.GameWorld_LocalGameWorld)
+		rgtPlayer = RegisteredPlayers(Memory.ReadPtr
+
+
+
+
+
+EFT.InventoryLogic.DogtagComponent
+18 : GroupId (type: System.String)
+20 : AccountId (type: System.String)
+28 : ProfileId (type: System.String)
+30 : Nickname (type: System.String)
+60 : Side (type: EFT.EPlayerSide)
+64 : Level (type: System.Int32)
+68 : Time (type: System.DateTime)
+38 : Status (type: System.String)
+40 : KillerAccountId (type: System.String)
+48 : KillerProfileId (type: System.String)
+50 : KillerName (type: System.String)
+58 : WeaponName (type: System.String)
+
+
+
+    2D-Map DMA Radar (WIP)
+    Uses PCI DMA
+    The base is _unityBase
+    _unityBase = vmm.ProcessGetModuleBase(_pid, "UnityPlayer.dll");
+    Get game object manager from that base address

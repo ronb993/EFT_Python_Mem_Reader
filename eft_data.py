@@ -14,12 +14,13 @@ class EFT:
         self.gom = pm.read_ulonglong(self.gom_addr)
         if self.gom:
             print(f'GOM Address found: {hex(self.gom)}')
-    
-    def update(self):
-        pass
-
-    def update_misc(self):
-        pass
+        self.lgw_ptr = 0
+        self.registered_player_ptr = 0
+        self.obj_ptr = 0
+        self.object_loop_ran = False
+        self.gameworld_ptr = 0
+        self.reg_players = 0
+        self.player_size = 0
 
     def ptr_chain(self, base, offsets) -> int:
         try:
@@ -30,19 +31,20 @@ class EFT:
         except Exception as e:
             print(e)
 
-    def get_gameworld_ptr(self, gom):
+    def run_objects_loop(self, gom, name):
         print("Running loop until raid starts....")
         object_name = ""
-        while object_name != "GameWorld":
+        while object_name != name:
             active_node = pm.read_ulonglong(gom + Offsets.active_node)
             if active_node != 0:
                 try:
-                    obj_ptr = pm.read_ulonglong(active_node + Offsets.active_node_ptr)
-                    object_name_ptr = pm.read_ulonglong(obj_ptr + Offsets.unity_object_name)
+                    self.obj_ptr = pm.read_ulonglong(active_node + Offsets.active_node_ptr)
+                    object_name_ptr = pm.read_ulonglong(self.obj_ptr + Offsets.unity_object_name)
                     object_name = pm.read_string(object_name_ptr)
-                    if object_name == "GameWorld":
-                        print(f'You Found GameWorld: {object_name}')
-                        return obj_ptr
+                    if object_name == name:
+                        print(f'You Found: {name}')
+                        self.object_loop_ran = True
+                        return self.obj_ptr
 
                 except Exception as e:
                      print(e)
@@ -50,27 +52,31 @@ class EFT:
             else:
                  return "cannot find active node"
 
-    def get_lgw(self):
+    def find_gameworld(self):
+        if not self.object_loop_ran:
+            self.gameworld_ptr = self.run_objects_loop(self.gom, "GameWorld")
+            return self.gameworld_ptr
+        else:
+            print("Secon iteration of runnning object loop")
+
+    def get_lgw_ptr(self):
             try:
-                gameworld_ptr = self.get_gameworld_ptr(self.gom)
-                lgw = self.ptr_chain(gameworld_ptr, offsets=Offsets.lgw_ptrchain)
-                print(f'LGW Address Found: {hex(lgw)}')
-                return lgw
+                self.lgw_ptr = self.ptr_chain(self.gameworld_ptr, offsets=Offsets.lgw_ptrchain)
+                print(f'LGW Address Found: {hex(self.lgw_ptr)}')
+                return self.lgw_ptr
 
             except Exception as e:
                 print("Cannot find game world, restart game")
                 sys.exit(e)
-    
 
     def get_registered_players(self):
-        lgw = self.get_lgw()
-        self.lgw_ptr = pm.read_ulonglong(lgw)
-        registered_player_ptr = pm.read_ulonglong(self.lgw_ptr + Offsets.reg_players)
-        player_size = pm.read_int(registered_player_ptr + Offsets.reg_player_count)
-        return player_size
-    
-    def update_registed_players(self):
-        registered_player_ptr = pm.read_ulonglong(self.lgw_ptr + Offsets.reg_players)
-        player_size = pm.read_int(registered_player_ptr + Offsets.reg_player_count)
-        return player_size
+        lgw = pm.read_ulonglong(self.lgw_ptr)
+        self.registered_player_ptr = pm.read_ulonglong(lgw + Offsets.reg_players)
+        self.player_size = pm.read_int(self.registered_player_ptr + Offsets.reg_player_count)
+        return self.player_size
 
+    def update_registered_players(self):
+        self.player_size = pm.read_int(self.registered_player_ptr + Offsets.reg_player_count)
+        print(self.player_size)
+        return self.player_size
+    

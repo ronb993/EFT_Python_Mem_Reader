@@ -4,11 +4,13 @@ import time
 def main():
     
     eft = EFT()
-    player_count = eft.get_registered_players()
-    print(player_count)
+    eft.find_gameworld()
+    eft.get_lgw_ptr()
+    eft.get_registered_players()
     while True:
-        time.sleep(5)
-        print(eft.update_registed_players())
+        time.sleep(1)
+        eft.update_registered_players()
+
 
 
 if __name__ == '__main__':

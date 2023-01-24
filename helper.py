@@ -1,6 +1,8 @@
 
 class Offsets:
     gom_offset = 0x17FFD28
+    active_node = 0x20
+    active_node_ptr = 0x10
     lgw_ptrchain = [0x30, 0x18, 0x28]
     reg_players = 0x90
     reg_player_count = 0x18

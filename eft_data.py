@@ -47,7 +47,7 @@ class EFT:
                         return self.obj_ptr
 
                 except Exception as e:
-                     print(e)
+                     #print(e)
                      continue
             else:
                  return "cannot find active node"
@@ -55,6 +55,7 @@ class EFT:
     def find_gameworld(self):
         if not self.object_loop_ran:
             self.gameworld_ptr = self.run_objects_loop(self.gom, "GameWorld")
+            print("You Found Game World")
             return self.gameworld_ptr
         else:
             print("Secon iteration of runnning object loop")
@@ -62,7 +63,7 @@ class EFT:
     def get_lgw_ptr(self):
             try:
                 self.lgw_ptr = self.ptr_chain(self.gameworld_ptr, offsets=Offsets.lgw_ptrchain)
-                print(f'LGW Address Found: {hex(self.lgw_ptr)}')
+                print("You Found Local Game World")
                 return self.lgw_ptr
 
             except Exception as e:
@@ -77,6 +78,5 @@ class EFT:
 
     def update_registered_players(self):
         self.player_size = pm.read_int(self.registered_player_ptr + Offsets.reg_player_count)
-        print(self.player_size)
         return self.player_size
     

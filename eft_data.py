@@ -46,7 +46,6 @@ class EFT:
                         return self.obj_ptr
 
                 except Exception as e:
-                     #print(e)
                      continue
             else:
                  return "cannot find active node"
@@ -69,6 +68,7 @@ class EFT:
 
     def get_registered_players(self):
         lgw = pm.read_ulonglong(self.lgw_ptr)
+        print(hex(lgw))
         self.registered_player_ptr = pm.read_ulonglong(lgw + Offsets.reg_players)
         self.player_size = pm.read_int(self.registered_player_ptr + Offsets.reg_player_count)
         return self.player_size
